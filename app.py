@@ -462,15 +462,15 @@ def modus(tanaman):
 
 	is_diy = sortbyfruit_is_wtm['Provinsi']=="DI Yogyakarta"
 	sortbyfruit_is_wtm_diy = sortbyfruit_is_wtm[is_diy]
-	wtm1 = [sortbyfruit_is_wtm_diy.mode().iloc[0,0],sortbyfruit_is_wtm_diy.mode().iloc[0,2]]
+	wtm1 = {'penyakit':sortbyfruit_is_wtm_diy.mode().iloc[0,0],'provinsi':sortbyfruit_is_wtm_diy.mode().iloc[0,2]}
 
 	is_jabar = sortbyfruit_is_wtm['Provinsi']=="Jawa Barat"
 	sortbyfruit_is_wtm_jabar = sortbyfruit_is_wtm[is_jabar]
-	wtm2 = [sortbyfruit_is_wtm_jabar.mode().iloc[0,0],sortbyfruit_is_wtm_jabar.mode().iloc[0,2]]
+	wtm2 = {'penyakit':sortbyfruit_is_wtm_jabar.mode().iloc[0,0],'provinsi':sortbyfruit_is_wtm_jabar.mode().iloc[0,2]}
 
 	is_jatim = sortbyfruit_is_wtm['Provinsi']=="Jawa Timur"
 	sortbyfruit_is_wtm_jatim = sortbyfruit_is_wtm[is_jatim]
-	wtm3 = [sortbyfruit_is_wtm_jatim.mode().iloc[0,0],sortbyfruit_is_wtm_jatim.mode().iloc[0,2]]
+	wtm3 = {'penyakit':sortbyfruit_is_wtm_jatim.mode().iloc[0,0],'provinsi': sortbyfruit_is_wtm_jatim.mode().iloc[0,2]}
 
 	wtm = [wtm1,wtm2,wtm3]
 
@@ -480,11 +480,11 @@ def modus(tanaman):
 
 	is_bkl = sortbyfruit_is_ylb['Provinsi']=="Bengkulu"
 	sortbyfruit_is_ylb_bkl = sortbyfruit_is_ylb[is_bkl]
-	ylb1 = [sortbyfruit_is_ylb_bkl.mode().iloc[0,0],sortbyfruit_is_ylb_bkl.mode().iloc[0,2]]
+	ylb1 = {'penyakit':sortbyfruit_is_ylb_bkl.mode().iloc[0,0],'provinsi':sortbyfruit_is_ylb_bkl.mode().iloc[0,2]}
 
 	is_jabar = sortbyfruit_is_ylb['Provinsi']=="Jawa Barat"
 	sortbyfruit_is_ylb_jabar = sortbyfruit_is_ylb[is_jabar]
-	ylb2 = [sortbyfruit_is_ylb_jabar.mode().iloc[0,0],sortbyfruit_is_ylb_jabar.mode().iloc[0,2]]
+	ylb2 = {'penyakit' : sortbyfruit_is_ylb_jabar.mode().iloc[0,0], 'provinsi' : sortbyfruit_is_ylb_jabar.mode().iloc[0,2]}
 
 	ylb = [ylb1,ylb2]
 
@@ -617,8 +617,8 @@ def kluster_summary():
 	
 def kluster_persentase():
 	result = kluster()
-	
-	
+
+
 	return result
 
 @app.route('/api/klustersummary/', methods=['GET'])

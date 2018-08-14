@@ -21,7 +21,7 @@ def index():
 
 
 @app.route('/api/tanaman/', methods=['GET'])
-def getMobil():
+def getTanaman():
     try:
         cursor.execute("SELECT * FROM tanaman")
         results = cursor.fetchall()
@@ -527,5 +527,108 @@ def getModus(nama_tanaman):
         return jsonify(results)
     except Exception as e:
         return jsonify({'response': 404, 'error': e})
+
+def kluster():
+	data = requests.get('http://localhost/rest-api/kluster_trial').json()
+	sc = [];
+	rc = [];
+	tgl = [];
+	dataTrial = [];
+	cluster = data['result']
+	
+	for val in cluster:
+	    sc.append(float(val['persen_sc_hidup']))
+	    rc.append(float(val['persen_rc_hidup']))
+	    tgl.append(val['bulan'])
+	    dataTrial.append({"id": float(val['id_trial']), "sc":float(val['persen_sc_hidup']),"rc":float(val['persen_rc_hidup']),"bln":int(val['bulan'])})
+
+	pdTrial = pd.DataFrame(dataTrial)
+
+	X = np.array(list(zip(pdTrial["sc"], pdTrial["rc"])))
+
+	def dist(a,b, ax=1):
+		return np.linalg.norm(a-b, axis=ax)
+	
+    # Number of clusters
+	k = 2
+	# X coordinates of random centroids
+	C_x = np.random.random_sample(size=k)
+	# Y coordinates of random centroids
+	C_y = np.random.random_sample(size=k)
+	C = np.array(list(zip(C_x, C_y)), dtype=np.float32)
+	
+	# To store the value of centroids when it updates
+	C_old = np.zeros(C.shape)
+	# Cluster Lables(0, 1)
+	clusters = np.zeros(len(X))
+	# Error func. - Distance between new centroids and old centroids
+	error = dist(C, C_old, None)
+
+	# Loop will run till the error becomes zero
+	while error != 0:
+	    # Assigning each value to its closest cluster
+	    for i in range(len(X)):
+	        distances = dist(X[i], C)
+	        cluster = np.argmin(distances)
+	        clusters[i] = cluster
+	    # Storing the old centroid values
+	    C_old = deepcopy(C)
+	    # Finding the new centroids by taking the average value
+	    for i in range(k):
+	        points = [X[j] for j in range(len(X)) if clusters[j] == i]
+	        C[i] = np.mean(points, axis=0)
+	    error = dist(C, C_old, None)
+
+	pdKluster = pd.DataFrame(clusters)
+	result1 = pd.concat([pdTrial,pdKluster], axis=1)
+	result = result1.rename(columns = {0 : 'kluster'})
+
+	return result
+
+def kluster_summary():
+	
+	result = kluster()
+
+	is_jan = result.loc[result["bln"] == 1]
+	total_jan = is_jan["bln"].count()
+
+	is_feb = result.loc[result["bln"] == 2]
+	total_feb = is_feb["bln"].count()
+
+	is_mar = result.loc[result["bln"] == 3]
+	total_mar = is_mar["bln"].count()
+
+	jan = result.loc[result['bln'] == 1]
+	jan_kl0 = jan.loc[jan["kluster"] == 0]
+	jan_kl0_jml = jan_kl0["kluster"].count()
+
+	feb = result.loc[result['bln'] == 2]
+	feb_kl0 = feb.loc[feb["kluster"] == 0]
+	feb_kl0_jml = feb_kl0["kluster"].count()
+
+	mar = result.loc[result['bln'] == 3]
+	mar_kl0 = mar.loc[mar["kluster"] == 0]
+	mar_kl0_jml = mar_kl0["kluster"].count()
+
+	dataKluster = {'Bulan' : ['Januari','Februari', 'Maret'],'Total' : [total_jan, total_feb, total_mar], 'good_trial' : [jan_kl0_jml,feb_kl0_jml,mar_kl0_jml]}
+	df = pd.DataFrame(dataKluster)
+	hasil = df.to_json(orient='index')
+	return hasil
+	
+def kluster_persentase():
+	result = kluster()
+	
+	
+	return result
+
+@app.route('/api/klustersummary/', methods=['GET'])
+def getKluster():
+    try:
+        results = kluster_summary()
+        
+        return jsonify(results)
+    except Exception as e:
+        return jsonify({'response': 404, 'error': e})
+
 
 if __name__ == '__main__' : app.run(host="localhost", port=8000, debug=True)

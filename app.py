@@ -1,6 +1,6 @@
 from flask import Flask, jsonify
 import pymysql
-
+from flask_cors import CORS
 from copy import deepcopy
 import numpy as np
 import pandas as pd
@@ -13,6 +13,7 @@ db = pymysql.connect('localhost','root', '', 'ketahanan_tanaman')
 cursor = db.cursor()
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def index():
@@ -622,7 +623,7 @@ def kluster_persentase(bulan):
 		jan_kl0 = jan.loc[jan["kluster"] == 0]
 		df_jan = pd.concat([jan_kl0["id"], jan_kl0["rc"],jan_kl0["sc"]],axis=1)
 		return df_jan.to_json(orient="index")
-	elif bulan == "Februari":
+	elif bulan == "februari":
 		feb = result.loc[result['bln'] == 2]
 		feb_kl0 = feb.loc[feb["kluster"] == 0]
 		df_feb = pd.concat([feb_kl0["id"], feb_kl0["rc"],feb_kl0["sc"]],axis=1)
@@ -641,7 +642,7 @@ def getKluster():
     try:
         results = kluster_summary()
         
-        return jsonify(results)
+        return jsonify(eval(results))
     except Exception as e:
         return jsonify({'response': 404, 'error': e})
 
@@ -651,9 +652,9 @@ def getPersentase(bulan):
     try:
         results = kluster_persentase(bulan)
         
-        return jsonify(results)
+        return jsonify(eval(results))
     except Exception as e:
         return jsonify({'response': 404, 'error': e})
 
 
-if __name__ == '__main__' : app.run(host="localhost", port=8000, debug=True)
+if __name__ == '__main__' : app.run(host="localhost", port=5000, debug=True)

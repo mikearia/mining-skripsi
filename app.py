@@ -1,6 +1,6 @@
 from flask import Flask, jsonify
 import pymysql
-
+from flask_cors import CORS
 from copy import deepcopy
 import numpy as np
 import pandas as pd
@@ -13,6 +13,7 @@ db = pymysql.connect('localhost','root', '', 'ketahanan_tanaman')
 cursor = db.cursor()
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def index():

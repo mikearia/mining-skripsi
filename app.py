@@ -13,7 +13,7 @@ from pandas import Series, DataFrame
 # cursor = db.cursor()
 
 app = Flask(__name__)
-CORS(app)
+# CORS(app)
 
 @app.route('/')
 def index():
@@ -657,4 +657,5 @@ def index():
 #         return jsonify({'response': 404, 'error': e})
 
 
-if __name__ == '__main__' : app.run()
+if __name__ == '__main__':
+	app.run()

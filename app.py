@@ -9,7 +9,7 @@ import requests
 import json 
 from pandas import Series, DataFrame
 
-db = pymysql.connect('localhost','root', '', 'ketahanan_tanaman')
+db = pymysql.connect('ramdhanrizki.net', 'root', 'code@labs', 'ketahanan_tanaman')
 cursor = db.cursor()
 
 app = Flask(__name__)

@@ -4,7 +4,7 @@ from flask_cors import CORS
 from copy import deepcopy
 import numpy as np
 import pandas as pd
-from matplotlib import pyplot as plt
+# from matplotlib import pyplot as plt
 import requests
 import json 
 from pandas import Series, DataFrame

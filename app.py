@@ -35,7 +35,7 @@ def getTanaman():
 
 
 def modus(tanaman):
-	data = requests.get('https://ews-mining.herokuapp.com/rest-api/identifikasi').json()
+	data = requests.get('https://ketahanan-tanaman.azurewebsites.net/rest-api/identifikasi').json()
 	
 	nama_penyakit = [];
 	nama_tanaman = [];
@@ -529,7 +529,7 @@ def getModus(nama_tanaman):
         return jsonify({'response': 404, 'error': e})
 
 def kluster():
-	data = requests.get('http://localhost/rest-api/kluster_trial').json()
+	data = requests.get('https://ketahanan-tanaman.azurewebsites.net/kluster_trial').json()
 	sc = []
 	rc = []
 	tgl = []

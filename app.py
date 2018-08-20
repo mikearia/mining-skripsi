@@ -657,4 +657,4 @@ def getPersentase(bulan):
         return jsonify({'response': 404, 'error': e})
 
 
-if __name__ == '__main__' : app.run(host="localhost", port=5000, debug=True)
+if __name__ == '__main__' : app.run()

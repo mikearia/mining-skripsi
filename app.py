@@ -36,7 +36,7 @@ def getTanaman():
 
 
 def modus(tanaman):
-	data = requests.get('http://localhost/rest-api/identifikasi').json()
+	data = requests.get('https://ews-mining.herokuapp.com/rest-api/identifikasi').json()
 	
 	nama_penyakit = [];
 	nama_tanaman = [];
